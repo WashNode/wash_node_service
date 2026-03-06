@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { RouterModule } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -29,7 +30,7 @@ import { AdminModule } from './modules/admin/admin.module';
         signOptions: { expiresIn: '1h' },
       }),
     }),
-    AdminModule,
+    RouterModule.register([{ path: 'admin', module: AdminModule }]),
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -2,8 +2,8 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { Admin } from '../schemas/admin.schema';
-import { AdminRepository } from '../admin.repository';
+import { Admin } from '../../../db/schemas/admin.schema';
+import { AdminRepository } from '../../../db/repositories/admin.repository';
 
 @Injectable()
 export class AuthService {

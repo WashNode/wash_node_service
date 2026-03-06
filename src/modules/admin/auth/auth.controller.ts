@@ -5,7 +5,7 @@ import { RegisterDto } from '../dto/register.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
-@Controller('admin')
+@Controller()
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
