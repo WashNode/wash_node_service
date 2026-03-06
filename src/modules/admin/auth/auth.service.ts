@@ -2,11 +2,11 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { Admin } from './schemas/admin.schema';
-import { AdminRepository } from './admin.repository';
+import { Admin } from '../schemas/admin.schema';
+import { AdminRepository } from '../admin.repository';
 
 @Injectable()
-export class AdminService {
+export class AuthService {
   constructor(private readonly adminRepo: AdminRepository) { }
 
   async createAdmin(userData: Partial<Admin>): Promise<Admin> {

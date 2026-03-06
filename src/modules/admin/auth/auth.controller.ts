@@ -1,14 +1,14 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
-import { AdminService } from './admin.service';
-import { LoginDto } from './dto/login.dto';
-import { RegisterDto } from './dto/register.dto';
+import { AuthService } from './auth.service';
+import { LoginDto } from '../dto/login.dto';
+import { RegisterDto } from '../dto/register.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
 @Controller('admin')
-export class AdminController {
+export class AuthController {
   constructor(
-    private readonly adminService: AdminService,
+    private readonly authService: AuthService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
   ) { }
@@ -16,7 +16,7 @@ export class AdminController {
   @Post('login')
   @HttpCode(HttpStatus.OK)
   async login(@Body() payload: LoginDto) {
-    const admin = await this.adminService.findAdminByEmail(payload.email);
+    const admin = await this.authService.findAdminByEmail(payload.email);
     if (!admin || admin.password !== payload.password) {
       return { success: false, message: 'Invalid credentials!' };
     }
@@ -30,7 +30,7 @@ export class AdminController {
 
   @Post('register-user')
   async register(@Body() payload: RegisterDto) {
-    const admin = await this.adminService.createAdmin({
+    const admin = await this.authService.createAdmin({
       email: payload.email,
       userName: payload.userName,
       password: this.configService.get<string>('DEFAULT_ADMIN_PASSWORD'),

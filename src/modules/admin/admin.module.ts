@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AdminService } from './admin.service';
-import { AdminController } from './admin.controller';
+import { AuthService } from './auth/auth.service';
+import { AuthController } from './auth/auth.controller';
 import { AdminRepository } from './admin.repository';
 import { Admin, AdminSchema } from './schemas/admin.schema';
 
@@ -9,8 +9,8 @@ import { Admin, AdminSchema } from './schemas/admin.schema';
   imports: [
     MongooseModule.forFeature([{ name: Admin.name, schema: AdminSchema }]),
   ],
-  controllers: [AdminController],
-  providers: [AdminService, AdminRepository],
-  exports: [AdminService, AdminRepository],
+  controllers: [AuthController],
+  providers: [AuthService, AdminRepository],
+  exports: [AuthService, AdminRepository],
 })
 export class AdminModule { }
