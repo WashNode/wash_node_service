@@ -1,10 +1,11 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { WinstonLogger } from '../../../common/logger/winston.logger';
 import { ServiceRepository } from '../../../db/repositories/service.repository';
 import { Service } from '../../../db/schemas/service.schema';
 
 @Injectable()
 export class ServiceService {
-    constructor(private readonly serviceRepository: ServiceRepository) { }
+    constructor(private readonly serviceRepository: ServiceRepository, private readonly logger: WinstonLogger) { }
 
     async createService(serviceData: Partial<Service>): Promise<Service> {
         try {

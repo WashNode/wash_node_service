@@ -10,6 +10,7 @@ import { Service, ServiceSchema } from '../../../db/schemas/service.schema';
 import { Vendor, VendorSchema } from '../../../db/schemas/vendor.schema';
 import { Customer, CustomerSchema } from '../../../db/schemas/customer.schema';
 import { Booking, BookingSchema } from '../../../db/schemas/booking.schema';
+import { LoggerModule } from 'src/common/logger/logger.module';
 
 @Module({
     imports: [
@@ -19,6 +20,7 @@ import { Booking, BookingSchema } from '../../../db/schemas/booking.schema';
             { name: Customer.name, schema: CustomerSchema },
             { name: Booking.name, schema: BookingSchema },
         ]),
+        LoggerModule
     ],
     controllers: [DashboardController],
     providers: [

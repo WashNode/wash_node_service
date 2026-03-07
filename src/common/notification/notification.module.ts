@@ -4,8 +4,10 @@ import { DummySmsGateway } from './gateways/dummy-sms.gateway';
 import { DummyEmailGateway } from './gateways/dummy-email.gateway';
 import { ISmsGateway } from './interfaces/sms.interface';
 import { IEmailGateway } from './interfaces/email.interface';
+import { LoggerModule } from '../logger/logger.module';
 
 @Module({
+    imports: [LoggerModule],
     providers: [
         NotificationService,
         {

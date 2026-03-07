@@ -13,6 +13,7 @@ import { VendorAvailability, VendorAvailabilitySchema } from '../../../db/schema
 import { NotificationModule } from '../../../common/notification/notification.module';
 import { ServicesModule } from '../services/services.module';
 import { DiscountModule } from '../discount/discount.module';
+import { LoggerModule } from 'src/common/logger/logger.module';
 
 @Module({
     imports: [
@@ -25,6 +26,7 @@ import { DiscountModule } from '../discount/discount.module';
         NotificationModule,
         ServicesModule,
         DiscountModule,
+        LoggerModule
     ],
     controllers: [VendorsController],
     providers: [

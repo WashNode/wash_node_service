@@ -1,9 +1,10 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { WinstonLogger } from '../../../common/logger/winston.logger';
 import { ServiceRepository } from '../../../db/repositories/service.repository';
 import { VendorRepository } from '../../../db/repositories/vendor.repository';
 import { CustomerRepository } from '../../../db/repositories/customer.repository';
 import { BookingRepository } from '../../../db/repositories/booking.repository';
-import moment from 'moment';
+import * as moment from 'moment';
 
 @Injectable()
 export class DashboardService {
@@ -12,6 +13,7 @@ export class DashboardService {
         private readonly vendorRepository: VendorRepository,
         private readonly customerRepository: CustomerRepository,
         private readonly bookingRepository: BookingRepository,
+        private readonly logger: WinstonLogger,
     ) { }
 
     async getDashboardStats() {
@@ -44,6 +46,7 @@ export class DashboardService {
                 totalBookings,
             };
         } catch (error) {
+            this.logger.error(`Failed to fetch dashboard statistics: ${(error as Error).message}`, (error as Error).stack, DashboardService.name);
             throw new InternalServerErrorException('Failed to fetch dashboard statistics');
         }
     }

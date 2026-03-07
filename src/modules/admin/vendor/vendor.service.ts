@@ -1,4 +1,5 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { WinstonLogger } from '../../../common/logger/winston.logger';
 import { VendorRepository } from '../../../db/repositories/vendor.repository';
 import { Vendor } from '../../../db/schemas/vendor.schema';
 import { NotificationService } from '../../../common/notification/notification.service';
@@ -8,6 +9,7 @@ export class VendorService {
     constructor(
         private readonly vendorRepository: VendorRepository,
         private readonly notificationService: NotificationService,
+        private readonly logger: WinstonLogger,
     ) { }
 
     async createVendor(vendorData: Partial<Vendor>): Promise<Vendor> {

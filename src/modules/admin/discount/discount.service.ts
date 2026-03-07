@@ -1,10 +1,11 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { WinstonLogger } from '../../../common/logger/winston.logger';
 import { DiscountRepository } from '../../../db/repositories/discount.repository';
 import { Discount } from '../../../db/schemas/discount.schema';
 
 @Injectable()
 export class DiscountService {
-    constructor(private readonly discountRepository: DiscountRepository) { }
+    constructor(private readonly discountRepository: DiscountRepository, private readonly logger: WinstonLogger) { }
 
     async createNewDiscount(discountData: Partial<Discount>): Promise<Discount> {
         try {

@@ -6,6 +6,7 @@ import { BookingService } from './booking.service';
 import { Admin, AdminSchema } from '../../../db/schemas/admin.schema';
 import { Booking, BookingSchema } from '../../../db/schemas/booking.schema';
 import { BookingRepository } from '../../../db/repositories/booking.repository';
+import { LoggerModule } from 'src/common/logger/logger.module';
 
 @Module({
     imports: [
@@ -13,6 +14,7 @@ import { BookingRepository } from '../../../db/repositories/booking.repository';
             { name: Admin.name, schema: AdminSchema },
             { name: Booking.name, schema: BookingSchema }
         ]),
+        LoggerModule
     ],
     controllers: [BookingController],
     providers: [BookingService, AdminRepository, BookingRepository],

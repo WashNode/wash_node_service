@@ -13,7 +13,7 @@ import { VendorsModule } from './vendor/vendors.module';
     DashboardModule,
     DiscountModule,
     ServicesModule,
-    VendorsModule,
+    VendorsModule
   ],
   controllers: [],
   providers: [],

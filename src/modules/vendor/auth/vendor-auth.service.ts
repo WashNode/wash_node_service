@@ -10,6 +10,7 @@ import { ConfigService } from '@nestjs/config';
 import { Vendor } from '../../../db/schemas/vendor.schema';
 import { VendorRepository } from '../../../db/repositories/vendor.repository';
 import { NotificationService } from '../../../common/notification/notification.service';
+import { WinstonLogger } from '../../../common/logger/winston.logger';
 import { VendorSignupDto } from './dto/vendor-signup.dto';
 import { VendorLoginDto } from './dto/vendor-login.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
@@ -22,6 +23,7 @@ export class VendorAuthService {
         private readonly jwtService: JwtService,
         private readonly configService: ConfigService,
         private readonly notificationService: NotificationService,
+        private readonly logger: WinstonLogger,
     ) { }
 
     async signup(signupDto: VendorSignupDto): Promise<{ accessToken: string }> {
@@ -39,6 +41,8 @@ export class VendorAuthService {
                 termsAndConditionsAccepted: false,
             });
 
+            this.logger.log(`Vendor signed up successfully: ${vendor.email}`, VendorAuthService.name);
+
             // Generate JWT token
             const accessToken = this.jwtService.sign(
                 { id: vendor._id, email: vendor.email },
@@ -51,6 +55,7 @@ export class VendorAuthService {
             if (error instanceof BadRequestException) {
                 throw error;
             }
+            this.logger.error(`Signup failed for ${signupDto.email}: ${error.message}`, error.stack, VendorAuthService.name);
             throw new InternalServerErrorException(error.message);
         }
     }
@@ -65,8 +70,11 @@ export class VendorAuthService {
 
             // Compare password - In production, use bcrypt.compare()
             if (vendor.password !== loginDto.password) {
+                this.logger.warn(`Invalid password attempt for ${loginDto.email}`, VendorAuthService.name);
                 throw new UnauthorizedException('Invalid password');
             }
+
+            this.logger.log(`Vendor logged in successfully: ${vendor.email}`, VendorAuthService.name);
 
             // Generate JWT token
             const accessToken = this.jwtService.sign(
@@ -83,6 +91,7 @@ export class VendorAuthService {
             ) {
                 throw error;
             }
+            this.logger.error(`Login failed for ${loginDto.email}: ${error.message}`, error.stack, VendorAuthService.name);
             throw new InternalServerErrorException(error.message);
         }
     }
@@ -110,12 +119,15 @@ export class VendorAuthService {
                 },
             );
 
+            this.logger.log(`Password reset email sent to ${vendor.email}`, VendorAuthService.name);
+
             return { message: 'Password reset email sent successfully' };
         } catch (err: unknown) {
             const error = err as Error;
             if (error instanceof NotFoundException) {
                 throw error;
             }
+            this.logger.error(`Forgot password failed for ${forgotPasswordDto.email}: ${error.message}`, error.stack, VendorAuthService.name);
             throw new InternalServerErrorException(error.message);
         }
     }
@@ -130,6 +142,7 @@ export class VendorAuthService {
 
             // Verify current password - In production, use bcrypt.compare()
             if (vendor.password !== resetPasswordDto.currentPassword) {
+                this.logger.warn(`Incorrect current password for vendor ${resetPasswordDto.vendorId}`, VendorAuthService.name);
                 throw new UnauthorizedException('Current password is incorrect');
             }
 
@@ -138,6 +151,8 @@ export class VendorAuthService {
                 { _id: resetPasswordDto.vendorId },
                 { password: resetPasswordDto.newPassword }, // In production, hash this with bcrypt
             );
+
+            this.logger.log(`Password reset successfully for vendor ${vendor._id}`, VendorAuthService.name);
 
             return { message: 'Password reset successfully' };
         } catch (err: unknown) {
@@ -148,6 +163,7 @@ export class VendorAuthService {
             ) {
                 throw error;
             }
+            this.logger.error(`Reset password failed for vendor ${resetPasswordDto.vendorId}: ${error.message}`, error.stack, VendorAuthService.name);
             throw new InternalServerErrorException(error.message);
         }
     }

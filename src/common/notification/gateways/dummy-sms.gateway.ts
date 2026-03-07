@@ -1,4 +1,5 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { WinstonLogger } from '../../logger/winston.logger';
 import { ISmsGateway, SmsSendStatus } from '../interfaces/sms.interface';
 
 /**
@@ -7,11 +8,11 @@ import { ISmsGateway, SmsSendStatus } from '../interfaces/sms.interface';
  */
 @Injectable()
 export class DummySmsGateway implements ISmsGateway {
-    private readonly logger = new Logger(DummySmsGateway.name);
+    constructor(private readonly logger: WinstonLogger) { }
 
     async sendSms(phoneNumber: string, message: string): Promise<{ success: boolean; messageId?: string; error?: string }> {
         try {
-            this.logger.log(`[DUMMY SMS] Sending SMS to ${phoneNumber}: ${message}`);
+            this.logger.log(`[DUMMY SMS] Sending SMS to ${phoneNumber}: ${message}`, DummySmsGateway.name);
 
             // TODO: Replace with actual SMS provider
             // Example implementations to add later:
@@ -22,13 +23,13 @@ export class DummySmsGateway implements ISmsGateway {
 
             const messageId = `DUMMY_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
-            this.logger.log(`[DUMMY SMS] SMS sent successfully with ID: ${messageId}`);
+            this.logger.log(`[DUMMY SMS] SMS sent successfully with ID: ${messageId}`, DummySmsGateway.name);
             return {
                 success: true,
                 messageId,
             };
         } catch (error) {
-            this.logger.error(`[DUMMY SMS] Failed to send SMS`, error);
+            this.logger.error(`[DUMMY SMS] Failed to send SMS`, error, DummySmsGateway.name);
             return {
                 success: false,
                 error: error instanceof Error ? error.message : 'Unknown error occurred',
