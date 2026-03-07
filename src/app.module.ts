@@ -6,6 +6,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AdminModule } from './modules/admin/admin.module';
+import { VendorModule } from './modules/vendor/vendor.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { AdminModule } from './modules/admin/admin.module';
       }),
     }),
     RouterModule.register([{ path: 'admin', module: AdminModule }]),
+    RouterModule.register([{ path: 'vendor', module: VendorModule }]),
   ],
   controllers: [AppController],
   providers: [AppService],
