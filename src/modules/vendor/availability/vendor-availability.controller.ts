@@ -7,10 +7,12 @@ import {
     Param,
     Put,
 } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiParam } from '@nestjs/swagger';
 import { VendorAvailabilityService } from './vendor-availability.service';
 import { UpdateVendorAvailabilityDto } from './dto/update-vendor-availability.dto';
 
-@Controller('availability')
+@ApiTags('Vendor')
+@Controller('vendor/availability')
 export class VendorAvailabilityController {
     constructor(
         private readonly availabilityService: VendorAvailabilityService,
@@ -18,6 +20,9 @@ export class VendorAvailabilityController {
 
     @Get(':vendorId')
     @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Get vendor availability by vendor ID' })
+    @ApiResponse({ status: 200, description: 'Vendor availability retrieved successfully' })
+    @ApiParam({ name: 'vendorId', description: 'The ID of the vendor' })
     async getAvailability(@Param('vendorId') vendorId: string) {
         const availability = await this.availabilityService.getAvailability(vendorId);
         return {
@@ -29,6 +34,10 @@ export class VendorAvailabilityController {
 
     @Put(':vendorId')
     @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Update vendor availability' })
+    @ApiResponse({ status: 200, description: 'Vendor availability updated successfully' })
+    @ApiParam({ name: 'vendorId', description: 'The ID of the vendor' })
+    @ApiBody({ type: UpdateVendorAvailabilityDto })
     async updateAvailability(
         @Param('vendorId') vendorId: string,
         @Body() updateDto: UpdateVendorAvailabilityDto,

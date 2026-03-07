@@ -23,8 +23,12 @@ export class NotificationService {
     /**
      * Send Email notification
      */
-    async sendEmail(to: string, subject: string, body: string, htmlBody?: string) {
-        return this.emailGateway.sendEmail(to, subject, body, htmlBody);
+    async sendEmail({ to, subject, template, context }: { to: string; subject: string; template: string; context: object }) {
+        let body = '';
+        // In a real implementation, you would use a templating engine to generate the email body
+        // based on the template and context. For simplicity, we're just returning the context as a string.
+        body = JSON.stringify(context);
+        return this.emailGateway.sendEmail(to, subject, body);
     }
 
     /**

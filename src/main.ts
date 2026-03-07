@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
@@ -20,6 +21,16 @@ async function bootstrap(): Promise<void> {
     credentials: true,
     allowedHeaders: 'Content-Type, Accept, Authorization',
   });
+
+  const config = new DocumentBuilder()
+    .setTitle('Wash Node Service API')
+    .setDescription('API documentation for Wash Node Service')
+    .setVersion('1.0')
+    .addBearerAuth()
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
+
   await app.listen(port);
   Logger.log(`Application is running on: http://localhost:${port}`);
 }

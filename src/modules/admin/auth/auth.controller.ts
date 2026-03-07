@@ -1,11 +1,13 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
-@Controller()
+@ApiTags('Admin')
+@Controller('admin')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
@@ -15,6 +17,10 @@ export class AuthController {
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Authenticate admin user' })
+  @ApiResponse({ status: 200, description: 'Login successful, returns bearer token' })
+  @ApiResponse({ status: 401, description: 'Invalid credentials' })
+  @ApiBody({ type: LoginDto })
   async login(@Body() payload: LoginDto) {
     const admin = await this.authService.findAdminByEmail(payload.email);
     if (!admin || admin.password !== payload.password) {
@@ -29,6 +35,9 @@ export class AuthController {
   }
 
   @Post('register-user')
+  @ApiOperation({ summary: 'Register a new admin user' })
+  @ApiResponse({ status: 201, description: 'Admin registered successfully' })
+  @ApiBody({ type: RegisterDto })
   async register(@Body() payload: RegisterDto) {
     const admin = await this.authService.createAdmin({
       email: payload.email,

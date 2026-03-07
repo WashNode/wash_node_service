@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { RouterModule } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -31,8 +30,8 @@ import { VendorModule } from './modules/vendor/vendor.module';
         signOptions: { expiresIn: '1h' },
       }),
     }),
-    RouterModule.register([{ path: 'admin', module: AdminModule }]),
-    RouterModule.register([{ path: 'vendor', module: VendorModule }]),
+    AdminModule,
+    VendorModule,
   ],
   controllers: [AppController],
   providers: [AppService],

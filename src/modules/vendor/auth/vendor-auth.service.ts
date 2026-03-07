@@ -35,7 +35,7 @@ export class VendorAuthService {
             // Create new vendor
             const vendor = await this.vendorRepo.create({
                 email: signupDto.email,
-                password: signupDto.password, // In production, this should be hashed with bcrypt
+                password: signupDto.password,
                 termsAndConditionsAccepted: false,
             });
 
