@@ -1,23 +1,23 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { BookingRepository } from '../../../db/repositories/booking.repository';
-import lodash from 'lodash';
+import { BookingListDto } from './dto/booking.dto';
 
 @Injectable()
 export class BookingService {
     constructor(private readonly bookingRepository: BookingRepository) { }
 
-    async listBookings(query) {
+    async listBookings(query: BookingListDto) {
         try {
-            const { requestTo, requestBy, } = query;
-            const filterParams: { requestTo?: string; requestBy?: string } = {};
-            if (requestTo) filterParams.requestTo = requestTo;
-            if (requestBy) filterParams.requestBy = requestBy;
-            let bookings = await this.bookingRepository.findAll(filterParams);
+            const where = { ...query };
+            const bookings = await this.bookingRepository.findAll({
+                where,
+                order: { date: 'ASC' },
+            });
 
-            bookings = lodash.sortBy(bookings, 'date');
             return { bookings };
-        } catch (error) {
-            throw new InternalServerErrorException(error);
+        } catch (err: unknown) {
+            const error = err as Error;
+            throw new InternalServerErrorException(error.message);
         }
     }
 }

@@ -2,6 +2,7 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Admin } from '../schemas/admin.schema';
+import { BaseRepository } from './base.repository';
 
 /**
  * Encapsulates all database interactions for the admin aggregate.
@@ -9,8 +10,14 @@ import { Admin } from '../schemas/admin.schema';
  * to focus purely on business logic and makes the code easier to test.
  */
 @Injectable()
-export class AdminRepository {
-    constructor(@InjectModel(Admin.name) private adminModel: Model<Admin>) { }
+export class AdminRepository extends BaseRepository<Admin> {
+    constructor(@InjectModel(Admin.name) private adminModel: Model<Admin>) {
+        super();
+    }
+
+    getModel(): Model<Admin> {
+        return this.adminModel;
+    }
 
     async create(userData: Partial<Admin>): Promise<Admin> {
         const existing = await this.adminModel

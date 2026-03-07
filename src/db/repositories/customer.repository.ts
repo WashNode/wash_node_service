@@ -1,21 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Booking } from '../schemas/booking.schema';
+import { Customer } from '../schemas/customer.schema';
 import { BaseRepository } from './base.repository';
 
 /**
- * Encapsulates all database interactions for the booking aggregate.
+ * Encapsulates all database interactions for the customer aggregate.
  * Keeping Mongoose model usage confined to this layer allows the service
  * to focus purely on business logic and makes the code easier to test.
  */
 @Injectable()
-export class BookingRepository extends BaseRepository<Booking> {
-    constructor(@InjectModel(Booking.name) private bookingModel: Model<Booking>) {
+export class CustomerRepository extends BaseRepository<Customer> {
+    constructor(@InjectModel(Customer.name) private customerModel: Model<Customer>) {
         super();
     }
 
-    getModel(): Model<Booking> {
-        return this.bookingModel;
+    getModel(): Model<Customer> {
+        return this.customerModel;
     }
 }
