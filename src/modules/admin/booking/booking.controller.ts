@@ -15,4 +15,12 @@ export class BookingController {
         const result = await this.bookingService.listBookings(query);
         return { success: true, ...result };
     }
+
+    @Get('defaults')
+    @ApiOperation({ summary: 'Retrieve default values (vendors and customers) for booking creation forms' })
+    @ApiResponse({ status: 200, description: 'Default arrays for bookings retrieved' })
+    async getDefaults() {
+        const result = await this.bookingService.getDefaults();
+        return { success: true, data: result, message: 'Booking Default data' };
+    }
 }

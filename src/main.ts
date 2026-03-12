@@ -14,9 +14,12 @@ async function bootstrap(): Promise<void> {
 
   const port = configService.get<number>('PORT') || 3000;
   const origin = configService.get<string>('ALLOWED_DOMAINS');
+  const allowedOrigins = origin
+    ? origin.split(',').map((o) => o.trim().replace(/\/$/, ''))
+    : '*';
 
   app.enableCors({
-    origin: origin, // e.g., 'http://localhost:3000' or ['http://site1.com', 'http://site2.com']
+    origin: allowedOrigins, // e.g., 'http://localhost:3000' or ['http://site1.com', 'http://site2.com']
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
     allowedHeaders: 'Content-Type, Accept, Authorization',

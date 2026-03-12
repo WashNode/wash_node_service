@@ -23,6 +23,11 @@ export abstract class BaseRepository<T> {
         return model.find(filter).exec() as unknown as T[];
     }
 
+    async findBySelectedFields(filter: any = {}, fields: string[]): Promise<T[]> {
+        const model = this.getModel();
+        return model.find(filter).select(fields).exec() as unknown as T[];
+    }
+
     async findById(id: string): Promise<T | null> {
         const model = this.getModel();
         return model.findById(id).exec() as unknown as T | null;
