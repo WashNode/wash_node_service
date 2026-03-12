@@ -1,8 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
 import * as mongoose from 'mongoose';
 
 @Schema({ timestamps: true })
-export class Vendor {
+export class Vendor extends Document {
   @Prop({
     type: String,
     required: [true, 'can\'t be blank'],
